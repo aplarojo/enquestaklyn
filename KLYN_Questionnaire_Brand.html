@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KLYN — Qüestionari de mercat</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #232d56;
+    --navy-mid: #2e3b6e;
+    --navy-light: #e8eaf2;
+    --navy-xlight: #f2f3f8;
+    --silver: #c8cdd5;
+    --silver-light: #f0f1f3;
+    --silver-dark: #8a9099;
+    --white: #ffffff;
+    --black: #000000;
+    --text: #1a1a2e;
+    --text-mid: #4a4f6b;
+    --text-light: #8a9099;
+    --border: #dde0e8;
+    --radius: 10px;
+    --radius-sm: 6px;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: #f5f6fa;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--navy);
+    color: var(--white);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-gradient {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, #232d56 60%, #3a4a80 100%);
+  }
+  .hero-circle-1 {
+    position: absolute; top: -80px; right: -80px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: rgba(200,205,213,0.07);
+  }
+  .hero-circle-2 {
+    position: absolute; bottom: -60px; left: -40px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(200,205,213,0.05);
+  }
+  .hero-inner {
+    max-width: 660px; margin: 0 auto;
+    padding: 3rem 2rem 3.5rem;
+    position: relative; z-index: 1;
+  }
+
+  /* Shoe logo SVG */
+  .logo-wrap { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.4rem; }
+  .logo-shoe {
+    width: 80px; height: 40px; flex-shrink: 0;
+  }
+  .logo-text {
+    font-size: 2.4rem; font-weight: 900; letter-spacing: 1px;
+    color: var(--white);
+  }
+  .hero-sub {
+    font-size: 0.78rem; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--silver);
+    margin-bottom: 2rem;
+    padding-left: 2px;
+  }
+  .hero-intro {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(200,205,213,0.25);
+    border-radius: var(--radius);
+    padding: 1.25rem 1.5rem;
+    font-size: 0.84rem; font-weight: 400;
+    line-height: 1.75; color: rgba(255,255,255,0.85);
+  }
+  .esomar-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 1rem;
+    background: rgba(200,205,213,0.15);
+    border: 1px solid rgba(200,205,213,0.3);
+    border-radius: 99px; padding: 4px 14px;
+    font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--silver);
+  }
+
+  /* ── PROGRESS ── */
+  .progress-wrap {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 2rem;
+    position: sticky; top: 0; z-index: 100;
+    box-shadow: 0 2px 16px rgba(35,45,86,0.08);
+  }
+  .progress-meta {
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 660px; margin: 0 auto 0.55rem;
+  }
+  .progress-label { font-size: 0.75rem; font-weight: 700; color: var(--navy); letter-spacing: 0.04em; text-transform: uppercase; }
+  .progress-count { font-size: 0.75rem; font-weight: 600; color: var(--text-light); font-variant-numeric: tabular-nums; }
+  .progress-track { max-width: 660px; margin: 0 auto; height: 3px; background: var(--silver-light); border-radius: 99px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--navy); border-radius: 99px; transition: width 0.5s cubic-bezier(.4,0,.2,1); width: 0%; }
+
+  /* ── MAIN ── */
+  .main { max-width: 660px; margin: 0 auto; padding: 2rem 1.5rem 6rem; }
+
+  /* ── SECTIONS ── */
+  .section { display: none; animation: fadeUp 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 0.68rem; font-weight: 800;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 5px 14px; border-radius: 99px;
+    margin-bottom: 1.75rem;
+  }
+  .badge-filter   { background: var(--navy-light); color: var(--navy); }
+  .badge-general  { background: #e8eef8; color: #1a3a6e; }
+  .badge-specific { background: #eeeaf8; color: #3a1a6e; }
+  .badge-purchase { background: #f8f0e8; color: #6e3a1a; }
+  .badge-demo     { background: var(--silver-light); color: #4a4f6b; }
+
+  /* ── QUESTION BLOCK ── */
+  .q-block { margin-bottom: 2.25rem; }
+  .q-meta { display: flex; align-items: center; gap: 8px; margin-bottom: 0.45rem; }
+  .q-num {
+    font-size: 0.65rem; font-weight: 800; color: var(--silver-dark);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: var(--silver-light); padding: 3px 8px; border-radius: 4px;
+  }
+  .q-type { font-size: 0.7rem; font-weight: 600; color: var(--navy-mid); }
+  .q-text { font-size: 0.97rem; font-weight: 700; line-height: 1.5; color: var(--text); margin-bottom: 0.45rem; }
+  .q-note { font-size: 0.75rem; color: var(--text-light); margin-bottom: 0.85rem; font-weight: 500; }
+
+  /* ── OPTIONS ── */
+  .options { display: flex; flex-direction: column; gap: 7px; }
+  .opt-label {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 15px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    cursor: pointer; font-size: 0.87rem; font-weight: 500;
+    color: var(--text-mid); transition: all 0.16s ease;
+    background: var(--white); user-select: none;
+  }
+  .opt-label:hover {
+    border-color: var(--navy);
+    background: var(--navy-xlight);
+    color: var(--navy);
+  }
+  .opt-label input { display: none; }
+  .opt-label.selected {
+    border-color: var(--navy);
+    background: var(--navy-light);
+    color: var(--navy);
+    font-weight: 700;
+  }
+  .opt-dot {
+    width: 18px; height: 18px;
+    border: 2px solid var(--silver);
+    border-radius: 50%; flex-shrink: 0;
+    transition: all 0.16s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .opt-label.selected .opt-dot {
+    border-color: var(--navy); background: var(--navy);
+  }
+  .opt-dot::after {
+    content: ''; width: 6px; height: 6px;
+    border-radius: 50%; background: white;
+    opacity: 0; transition: opacity 0.14s;
+  }
+  .opt-label.selected .opt-dot::after { opacity: 1; }
+
+  /* checkbox variant */
+  .opt-label.opt-box .opt-dot { border-radius: 3px; }
+  .opt-label.opt-box.selected .opt-dot::after {
+    content: '✓'; font-size: 10px; font-weight: 900;
+    width: auto; height: auto; border-radius: 0;
+    background: transparent; color: white; opacity: 1;
+  }
+
+  /* ── LIKERT ── */
+  .likert-wrap { display: flex; flex-direction: column; gap: 10px; }
+  .likert-scale { display: flex; gap: 8px; }
+  .likert-btn {
+    flex: 1; aspect-ratio: 1; max-width: 60px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white); cursor: pointer;
+    font-size: 0.9rem; font-weight: 700;
+    color: var(--text-light);
+    transition: all 0.16s;
+    font-family: 'Montserrat', sans-serif;
+  }
+  .likert-btn:hover { border-color: var(--navy); color: var(--navy); background: var(--navy-xlight); }
+  .likert-btn.selected { border-color: var(--navy); background: var(--navy); color: white; }
+  .likert-labels { display: flex; justify-content: space-between; font-size: 0.7rem; font-weight: 600; color: var(--text-light); }
+
+  /* ── RANK ── */
+  .rank-list { display: flex; flex-direction: column; gap: 6px; }
+  .rank-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    background: var(--white); font-size: 0.87rem; font-weight: 500;
+    color: var(--text-mid); transition: border-color 0.16s;
+  }
+  .rank-item:hover { border-color: var(--navy); }
+  .rank-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--navy); color: white;
+    font-size: 0.72rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .rank-arrows { margin-left: auto; display: flex; flex-direction: column; gap: 1px; }
+  .rank-arrows button {
+    background: none; border: none; cursor: pointer;
+    color: var(--silver-dark); font-size: 0.7rem; line-height: 1;
+    padding: 2px 5px; border-radius: 3px; transition: all 0.14s;
+  }
+  .rank-arrows button:hover { color: var(--navy); background: var(--navy-light); }
+
+  /* ── TEXTAREA ── */
+  .q-textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.87rem; font-weight: 500;
+    color: var(--text); background: var(--white);
+    resize: vertical; min-height: 96px;
+    outline: none; transition: border-color 0.16s;
+  }
+  .q-textarea:focus { border-color: var(--navy); }
+  .q-textarea::placeholder { color: var(--text-light); font-weight: 400; }
+
+  /* ── NAV ── */
+  .nav {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-top: 2.5rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 10px 26px; border-radius: var(--radius-sm);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 0.82rem; font-weight: 700;
+    cursor: pointer; letter-spacing: 0.03em;
+    border: 1.5px solid var(--border);
+    background: var(--white); color: var(--text-mid);
+    transition: all 0.16s;
+  }
+  .btn:hover { background: var(--silver-light); color: var(--navy); border-color: var(--silver); }
+  .btn-primary {
+    background: var(--navy); border-color: var(--navy); color: white;
+  }
+  .btn-primary:hover { background: var(--navy-mid); border-color: var(--navy-mid); }
+
+  /* ── ERROR ── */
+  .error-msg { display: none; color: #b0220a; font-size: 0.75rem; font-weight: 700; margin-top: 8px; }
+  .error-msg.visible { display: block; }
+
+  /* ── DIVIDER ── */
+  .section-divider { border: none; border-top: 1px solid var(--border); margin: 2rem 0; }
+
+  /* ── END ── */
+  #sec-end { display: none; }
+  .result-hero { text-align: center; padding: 3rem 1rem 2rem; }
+  .result-check {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: var(--navy); color: white;
+    font-size: 1.8rem; display: flex; align-items: center;
+    justify-content: center; margin: 0 auto 1.5rem;
+  }
+  .result-title { font-size: 1.55rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 0.5rem; color: var(--navy); }
+  .result-sub { font-size: 0.9rem; color: var(--text-mid); font-weight: 500; line-height: 1.7; max-width: 400px; margin: 0 auto 1rem; }
+  .esomar-note { font-size: 0.7rem; color: var(--text-light); font-weight: 500; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 1.75rem; }
+  .stat-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.1rem; text-align: center;
+  }
+  .stat-num { font-size: 1.9rem; font-weight: 900; color: var(--navy); }
+  .stat-label { font-size: 0.68rem; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+
+  .result-summary {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; margin-top: 1.5rem;
+  }
+  .summary-header {
+    background: var(--navy); color: white;
+    padding: 0.9rem 1.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .summary-header span:first-child { font-size: 0.82rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.06em; }
+  .summary-header span:last-child { font-size: 0.72rem; opacity: 0.65; font-weight: 500; }
+  .summary-row {
+    display: flex; gap: 14px; padding: 11px 1.5rem;
+    border-bottom: 1px solid var(--border); font-size: 0.84rem;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-q { color: var(--navy); min-width: 36px; font-weight: 800; font-size: 0.75rem; }
+  .summary-a { color: var(--text); font-weight: 500; flex: 1; }
+
+  /* ── TERMINATED ── */
+  .terminated {
+    text-align: center; padding: 4rem 1rem;
+  }
+  .terminated-icon {
+    font-size: 2.5rem; margin-bottom: 1rem;
+  }
+  .terminated-title { font-size: 1.3rem; font-weight: 900; color: var(--navy); margin-bottom: 0.5rem; }
+  .terminated-sub { font-size: 0.88rem; color: var(--text-mid); font-weight: 500; max-width: 360px; margin: 0 auto; line-height: 1.7; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-gradient"></div>
+  <div class="hero-circle-1"></div>
+  <div class="hero-circle-2"></div>
+  <div class="hero-inner">
+    <div class="logo-wrap">
+      <!-- Shoe silhouette SVG matching KLYN logo shape -->
+      <svg class="logo-shoe" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="60" cy="30" rx="55" ry="24" fill="#c8cdd5" opacity="0.35"/>
+        <ellipse cx="60" cy="29" rx="50" ry="21" fill="#232d56"/>
+        <text x="50%" y="55%" font-family="Montserrat,sans-serif" font-weight="900" font-size="18" fill="#c8cdd5" text-anchor="middle" dominant-baseline="middle">KLYN</text>
+      </svg>
+      <div class="logo-text">KLYN</div>
+    </div>
+    <div class="hero-sub">Kit de neteja premium per a sneakers</div>
+    <div class="hero-intro">
+      Estem duent a terme un estudi de mercat per conèixer millor els hàbits i necessitats de les persones en relació a la neteja i el manteniment de sneakers. Les teves respostes ens ajudaran a millorar el nostre producte i adaptar-lo a les necessitats reals dels consumidors.<br><br>
+      Totes les dades recollides seran tractades de forma <strong>estrictament anònima i confidencial</strong>. Aquesta enquesta compleix el codi ètic <strong>ESOMAR</strong> i el RGPD.
+      <div class="esomar-tag">✦ ESOMAR · Dades anònimes · No cedides a tercers</div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="progress-meta">
+    <span class="progress-label" id="progress-label">Filtres de qualificació</span>
+    <span class="progress-count" id="progress-count">0 / 17</span>
+  </div>
+  <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- FILTRE -->
+  <div class="section active" id="sec-filter">
+    <span class="section-badge badge-filter">● Preguntes de filtre</span>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P1</span><span class="q-type">Dicotòmica · filtre d'exclusió</span></div>
+      <div class="q-text">Tens o uses habitualment algun parell de sneakers o bambes?</div>
+      <div class="options" id="p1">
+        <label class="opt-label" onclick="selectOpt(this,'p1')"><input type="radio" name="p1" value="Sí, n'uso regularment"><div class="opt-dot"></div>Sí, n'uso regularment</label>
+        <label class="opt-label" onclick="selectOpt(this,'p1')"><input type="radio" name="p1" value="De vegades, però no habitualment"><div class="opt-dot"></div>De vegades, però no habitualment</label>
+        <label class="opt-label" onclick="selectOpt(this,'p1')"><input type="radio" name="p1" value="No, no uso sneakers"><div class="opt-dot"></div>No, no uso sneakers <span style="font-size:0.72rem;color:var(--text-light);margin-left:6px;font-weight:500;">(→ finalitza)</span></label>
+      </div>
+      <div class="error-msg" id="err-p1">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P2</span><span class="q-type">Dicotòmica · filtre d'exclusió</span></div>
+      <div class="q-text">Alguna vegada has netejat les teves sneakers de manera activa (no simplement passar-hi un drap)?</div>
+      <div class="options" id="p2">
+        <label class="opt-label" onclick="selectOpt(this,'p2')"><input type="radio" name="p2" value="Sí, ho faig o ho he fet"><div class="opt-dot"></div>Sí, ho faig o ho he fet</label>
+        <label class="opt-label" onclick="selectOpt(this,'p2')"><input type="radio" name="p2" value="No ho he fet, però m'ho plantejaria"><div class="opt-dot"></div>No ho he fet, però m'ho plantejaria</label>
+        <label class="opt-label" onclick="selectOpt(this,'p2')"><input type="radio" name="p2" value="No m'interessa"><div class="opt-dot"></div>No m'interessa <span style="font-size:0.72rem;color:var(--text-light);margin-left:6px;font-weight:500;">(→ finalitza)</span></label>
+      </div>
+      <div class="error-msg" id="err-p2">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="nav"><span></span>
+      <button class="btn btn-primary" onclick="goNext('sec-filter','sec-general',['p1','p2'],true)">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- GENERAL -->
+  <div class="section" id="sec-general">
+    <span class="section-badge badge-general">● Preguntes generals</span>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P3</span><span class="q-type">Escala multiopció</span></div>
+      <div class="q-text">Amb quina freqüència neteges les teves sneakers?</div>
+      <div class="options" id="p3">
+        <label class="opt-label" onclick="selectOpt(this,'p3')"><input type="radio" name="p3" value="Setmanalment o més sovint"><div class="opt-dot"></div>Setmanalment o més sovint</label>
+        <label class="opt-label" onclick="selectOpt(this,'p3')"><input type="radio" name="p3" value="Cada 2–4 setmanes"><div class="opt-dot"></div>Cada 2–4 setmanes</label>
+        <label class="opt-label" onclick="selectOpt(this,'p3')"><input type="radio" name="p3" value="Un cop al mes o menys"><div class="opt-dot"></div>Un cop al mes o menys</label>
+        <label class="opt-label" onclick="selectOpt(this,'p3')"><input type="radio" name="p3" value="Només quan estan molt brutes"><div class="opt-dot"></div>Només quan estan molt brutes</label>
+        <label class="opt-label" onclick="selectOpt(this,'p3')"><input type="radio" name="p3" value="Pràcticament mai"><div class="opt-dot"></div>Pràcticament mai</label>
+      </div>
+      <div class="error-msg" id="err-p3">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P4</span><span class="q-type">Multiresposta (múltiple)</span></div>
+      <div class="q-text">Quins productes o mètodes uses habitualment per netejar les teves sneakers?</div>
+      <div class="q-note">Pots marcar més d'una opció</div>
+      <div class="options" id="p4">
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Aigua i esponja o drap"><div class="opt-dot"></div>Aigua i esponja o drap</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Sabó de roba o detergent"><div class="opt-dot"></div>Sabó de roba o detergent</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Rentadora"><div class="opt-dot"></div>Rentadora</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Raspall de roba"><div class="opt-dot"></div>Raspall de roba</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Kits especialitzats (Crep Protect, Jason Markk…)"><div class="opt-dot"></div>Kits especialitzats (Crep Protect, Jason Markk…)</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Tovalloletes de neteja"><div class="opt-dot"></div>Tovalloletes de neteja</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Netejador multiusos"><div class="opt-dot"></div>Netejador multiusos</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Cap mètode concret"><div class="opt-dot"></div>Cap mètode concret</label>
+      </div>
+      <div class="error-msg" id="err-p4">Selecciona almenys una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P5</span><span class="q-type">Escala multiopció</span></div>
+      <div class="q-text">Quantes parelles de sneakers tens aproximadament?</div>
+      <div class="options" id="p5">
+        <label class="opt-label" onclick="selectOpt(this,'p5')"><input type="radio" name="p5" value="1–2 parelles"><div class="opt-dot"></div>1–2 parelles</label>
+        <label class="opt-label" onclick="selectOpt(this,'p5')"><input type="radio" name="p5" value="3–5 parelles"><div class="opt-dot"></div>3–5 parelles</label>
+        <label class="opt-label" onclick="selectOpt(this,'p5')"><input type="radio" name="p5" value="6–10 parelles"><div class="opt-dot"></div>6–10 parelles</label>
+        <label class="opt-label" onclick="selectOpt(this,'p5')"><input type="radio" name="p5" value="Més de 10 parelles"><div class="opt-dot"></div>Més de 10 parelles</label>
+      </div>
+      <div class="error-msg" id="err-p5">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn" onclick="goBack('sec-general','sec-filter')">← Enrere</button>
+      <button class="btn btn-primary" onclick="goNext('sec-general','sec-specific',['p3','p4','p5'])">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- SPECIFIC -->
+  <div class="section" id="sec-specific">
+    <span class="section-badge badge-specific">● Preguntes específiques</span>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P6</span><span class="q-type">Escala de Likert (1–5)</span></div>
+      <div class="q-text">Quina importància té per a tu que les teves sneakers estiguin sempre netes i en bon estat?</div>
+      <div class="likert-wrap">
+        <div class="likert-scale" id="lk-p6">
+          <button class="likert-btn" onclick="selectLikert('p6',this,1)">1</button>
+          <button class="likert-btn" onclick="selectLikert('p6',this,2)">2</button>
+          <button class="likert-btn" onclick="selectLikert('p6',this,3)">3</button>
+          <button class="likert-btn" onclick="selectLikert('p6',this,4)">4</button>
+          <button class="likert-btn" onclick="selectLikert('p6',this,5)">5</button>
+        </div>
+        <div class="likert-labels"><span>Gens important</span><span>Molt important</span></div>
+      </div>
+      <div class="error-msg" id="err-p6">Selecciona un valor per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P7</span><span class="q-type">Rànquing d'atributs</span></div>
+      <div class="q-text">Ordena de més a menys important els atributs que valores en un kit de neteja</div>
+      <div class="q-note">Usa les fletxes ▲▼ per reordenar · 1 = més important</div>
+      <div class="rank-list" id="rank-p7">
+        <div class="rank-item" data-val="Eficàcia del producte"><span class="rank-num">1</span>Eficàcia del producte<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+        <div class="rank-item" data-val="Preu accessible"><span class="rank-num">2</span>Preu accessible<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+        <div class="rank-item" data-val="Facilitat d'ús"><span class="rank-num">3</span>Facilitat d'ús<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+        <div class="rank-item" data-val="Sostenibilitat ecològica"><span class="rank-num">4</span>Sostenibilitat ecològica<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+        <div class="rank-item" data-val="Disseny del packaging"><span class="rank-num">5</span>Disseny del packaging<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+        <div class="rank-item" data-val="Kit complet tot en un"><span class="rank-num">6</span>Kit complet tot en un<div class="rank-arrows"><button onclick="moveUp(this)">▲</button><button onclick="moveDown(this)">▼</button></div></div>
+      </div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P8</span><span class="q-type">Multiresposta (múltiple)</span></div>
+      <div class="q-text">Quines dificultats has tingut habitualment quan has intentat netejar les teves sneakers?</div>
+      <div class="q-note">Pots marcar més d'una opció</div>
+      <div class="options" id="p8">
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="No saber quin producte usar per cada material"><div class="opt-dot"></div>No saber quin producte usar per cada material</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Por de fer-les malbé"><div class="opt-dot"></div>Por de fer-les malbé</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="El resultat no és el que esperava"><div class="opt-dot"></div>El resultat no és el que esperava</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Falta de temps per fer-ho correctament"><div class="opt-dot"></div>Falta de temps per fer-ho correctament</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="Productes del mercat massa cars o difícils de trobar"><div class="opt-dot"></div>Productes del mercat massa cars o difícils de trobar</label>
+        <label class="opt-label opt-box" onclick="selectCheck(this)"><input type="checkbox" value="No he tingut dificultats destacades"><div class="opt-dot"></div>No he tingut dificultats destacades</label>
+      </div>
+      <div class="error-msg" id="err-p8">Selecciona almenys una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P9</span><span class="q-type">Escala de Likert (1–5)</span></div>
+      <div class="q-text">Grau de satisfacció amb els mètodes o productes que has usat fins ara per netejar les teves sneakers</div>
+      <div class="likert-wrap">
+        <div class="likert-scale" id="lk-p9">
+          <button class="likert-btn" onclick="selectLikert('p9',this,1)">1</button>
+          <button class="likert-btn" onclick="selectLikert('p9',this,2)">2</button>
+          <button class="likert-btn" onclick="selectLikert('p9',this,3)">3</button>
+          <button class="likert-btn" onclick="selectLikert('p9',this,4)">4</button>
+          <button class="likert-btn" onclick="selectLikert('p9',this,5)">5</button>
+        </div>
+        <div class="likert-labels"><span>Molt insatisfet/a</span><span>Molt satisfet/a</span></div>
+      </div>
+      <div class="error-msg" id="err-p9">Selecciona un valor per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P10</span><span class="q-type">Pregunta oberta</span></div>
+      <div class="q-text">Si poguessis millorar alguna cosa del procés de neteja de les teves sneakers, què canviaries?</div>
+      <textarea class="q-textarea" id="p10" placeholder="Escriu la teva resposta aquí…"></textarea>
+    </div>
+
+    <div class="nav">
+      <button class="btn" onclick="goBack('sec-specific','sec-general')">← Enrere</button>
+      <button class="btn btn-primary" onclick="goNext('sec-specific','sec-purchase',['p6','p8','p9'])">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- PURCHASE -->
+  <div class="section" id="sec-purchase">
+    <span class="section-badge badge-purchase">● Intenció de compra</span>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P11</span><span class="q-type">Escala de probabilitat</span></div>
+      <div class="q-text">Si existís un kit de neteja complet per a sneakers (líquid, raspalls, tovallola i colònia) a 24,99 €, quina seria la probabilitat que el compressis?</div>
+      <div class="options" id="p11">
+        <label class="opt-label" onclick="selectOpt(this,'p11')"><input type="radio" name="p11" value="Certament el compraria"><div class="opt-dot"></div>Certament el compraria</label>
+        <label class="opt-label" onclick="selectOpt(this,'p11')"><input type="radio" name="p11" value="Probablement el compraria"><div class="opt-dot"></div>Probablement el compraria</label>
+        <label class="opt-label" onclick="selectOpt(this,'p11')"><input type="radio" name="p11" value="Potser sí, potser no"><div class="opt-dot"></div>Potser sí, potser no</label>
+        <label class="opt-label" onclick="selectOpt(this,'p11')"><input type="radio" name="p11" value="Probablement no el compraria"><div class="opt-dot"></div>Probablement no el compraria</label>
+        <label class="opt-label" onclick="selectOpt(this,'p11')"><input type="radio" name="p11" value="Certament no el compraria"><div class="opt-dot"></div>Certament no el compraria</label>
+      </div>
+      <div class="error-msg" id="err-p11">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P12</span><span class="q-type">Elecció binària — experiment pack</span></div>
+      <div class="q-text">Tenint en compte les dues opcions, quin pack preferiríes adquirir?</div>
+      <div class="q-note">Pack bàsic (14,99 €): líquid + 1 raspall · Pack premium (24,99 €): líquid + 3 raspalls + colònia + hormes</div>
+      <div class="options" id="p12">
+        <label class="opt-label" onclick="selectOpt(this,'p12')"><input type="radio" name="p12" value="Pack bàsic (14,99 €) — prioritzo el preu"><div class="opt-dot"></div>Pack bàsic (14,99 €) — prioritzo el preu</label>
+        <label class="opt-label" onclick="selectOpt(this,'p12')"><input type="radio" name="p12" value="Pack premium (24,99 €) — vull el kit complet"><div class="opt-dot"></div>Pack premium (24,99 €) — vull el kit complet</label>
+        <label class="opt-label" onclick="selectOpt(this,'p12')"><input type="radio" name="p12" value="Depèn del moment i la necessitat"><div class="opt-dot"></div>Depèn del moment i la necessitat</label>
+        <label class="opt-label" onclick="selectOpt(this,'p12')"><input type="radio" name="p12" value="Cap dels dos m'interessa"><div class="opt-dot"></div>Cap dels dos m'interessa</label>
+      </div>
+      <div class="error-msg" id="err-p12">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P13</span><span class="q-type">Escala multiopció — canal</span></div>
+      <div class="q-text">On preferiríes comprar un producte com KLYN?</div>
+      <div class="options" id="p13">
+        <label class="opt-label" onclick="selectOpt(this,'p13')"><input type="radio" name="p13" value="Web pròpia de la marca (e-commerce)"><div class="opt-dot"></div>Web pròpia de la marca (e-commerce)</label>
+        <label class="opt-label" onclick="selectOpt(this,'p13')"><input type="radio" name="p13" value="Amazon o marketplace similar"><div class="opt-dot"></div>Amazon o marketplace similar</label>
+        <label class="opt-label" onclick="selectOpt(this,'p13')"><input type="radio" name="p13" value="Botiga física especialitzada en sneakers"><div class="opt-dot"></div>Botiga física especialitzada en sneakers</label>
+        <label class="opt-label" onclick="selectOpt(this,'p13')"><input type="radio" name="p13" value="Xarxes socials (Instagram, TikTok Shop…)"><div class="opt-dot"></div>Xarxes socials (Instagram, TikTok Shop…)</label>
+        <label class="opt-label" onclick="selectOpt(this,'p13')"><input type="radio" name="p13" value="M'és indiferent el canal de compra"><div class="opt-dot"></div>M'és indiferent el canal de compra</label>
+      </div>
+      <div class="error-msg" id="err-p13">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P14</span><span class="q-type">NPS simplificat (1–5)</span></div>
+      <div class="q-text">Quina probabilitat hi ha que recomanessis un producte com KLYN a un amic o familiar?</div>
+      <div class="likert-wrap">
+        <div class="likert-scale" id="lk-p14">
+          <button class="likert-btn" onclick="selectLikert('p14',this,1)">1</button>
+          <button class="likert-btn" onclick="selectLikert('p14',this,2)">2</button>
+          <button class="likert-btn" onclick="selectLikert('p14',this,3)">3</button>
+          <button class="likert-btn" onclick="selectLikert('p14',this,4)">4</button>
+          <button class="likert-btn" onclick="selectLikert('p14',this,5)">5</button>
+        </div>
+        <div class="likert-labels"><span>Gens probable</span><span>Molt probable</span></div>
+      </div>
+      <div class="error-msg" id="err-p14">Selecciona un valor per continuar.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn" onclick="goBack('sec-purchase','sec-specific')">← Enrere</button>
+      <button class="btn btn-primary" onclick="goNext('sec-purchase','sec-demo',['p11','p12','p13','p14'])">Continuar →</button>
+    </div>
+  </div>
+
+  <!-- DEMO -->
+  <div class="section" id="sec-demo">
+    <span class="section-badge badge-demo">● Dades de classificació</span>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P15</span><span class="q-type">Edat — variable clau</span></div>
+      <div class="q-text">Quina és la teva franja d'edat?</div>
+      <div class="options" id="p15">
+        <label class="opt-label" onclick="selectOpt(this,'p15')"><input type="radio" name="p15" value="Menys de 16 anys"><div class="opt-dot"></div>Menys de 16 anys</label>
+        <label class="opt-label" onclick="selectOpt(this,'p15')"><input type="radio" name="p15" value="16–24 anys"><div class="opt-dot"></div>16–24 anys</label>
+        <label class="opt-label" onclick="selectOpt(this,'p15')"><input type="radio" name="p15" value="25–35 anys"><div class="opt-dot"></div>25–35 anys</label>
+        <label class="opt-label" onclick="selectOpt(this,'p15')"><input type="radio" name="p15" value="36–50 anys"><div class="opt-dot"></div>36–50 anys</label>
+        <label class="opt-label" onclick="selectOpt(this,'p15')"><input type="radio" name="p15" value="Més de 50 anys"><div class="opt-dot"></div>Més de 50 anys</label>
+      </div>
+      <div class="error-msg" id="err-p15">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P16</span><span class="q-type">Gènere</span></div>
+      <div class="q-text">Amb quin gènere t'identifiques?</div>
+      <div class="options" id="p16">
+        <label class="opt-label" onclick="selectOpt(this,'p16')"><input type="radio" name="p16" value="Home"><div class="opt-dot"></div>Home</label>
+        <label class="opt-label" onclick="selectOpt(this,'p16')"><input type="radio" name="p16" value="Dona"><div class="opt-dot"></div>Dona</label>
+        <label class="opt-label" onclick="selectOpt(this,'p16')"><input type="radio" name="p16" value="No binari / Altre"><div class="opt-dot"></div>No binari / Altre</label>
+        <label class="opt-label" onclick="selectOpt(this,'p16')"><input type="radio" name="p16" value="Prefereixo no indicar-ho"><div class="opt-dot"></div>Prefereixo no indicar-ho</label>
+      </div>
+      <div class="error-msg" id="err-p16">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="q-block">
+      <div class="q-meta"><span class="q-num">P17</span><span class="q-type">Zona de residència</span></div>
+      <div class="q-text">En quin tipus de zona resideixes habitualment?</div>
+      <div class="options" id="p17">
+        <label class="opt-label" onclick="selectOpt(this,'p17')"><input type="radio" name="p17" value="Gran ciutat (+ 100.000 hab.)"><div class="opt-dot"></div>Gran ciutat (+ 100.000 hab.)</label>
+        <label class="opt-label" onclick="selectOpt(this,'p17')"><input type="radio" name="p17" value="Ciutat mitjana (20.000–100.000 hab.)"><div class="opt-dot"></div>Ciutat mitjana (20.000–100.000 hab.)</label>
+        <label class="opt-label" onclick="selectOpt(this,'p17')"><input type="radio" name="p17" value="Poble o zona rural (– 20.000 hab.)"><div class="opt-dot"></div>Poble o zona rural (– 20.000 hab.)</label>
+      </div>
+      <div class="error-msg" id="err-p17">Selecciona una opció per continuar.</div>
+    </div>
+
+    <div class="nav">
+      <button class="btn" onclick="goBack('sec-demo','sec-purchase')">← Enrere</button>
+      <button class="btn btn-primary" onclick="submitForm()">Enviar enquesta ✓</button>
+    </div>
+  </div>
+
+  <!-- END -->
+  <div id="sec-end">
+    <div class="result-hero">
+      <div class="result-check">✓</div>
+      <div class="result-title">Gràcies per participar!</div>
+      <div class="result-sub">Les teves respostes ens ajudaran a construir KLYN d'una manera millor i més adaptada al que realment necessites.</div>
+      <div class="esomar-note">Les dades seran tractades de manera anònima conforme al codi ESOMAR i el RGPD · Àlex Pla Rojo & Ot Isern Callicó</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-num">17</div><div class="stat-label">Preguntes</div></div>
+      <div class="stat-card"><div class="stat-num" id="stat-time">1</div><div class="stat-label">Minuts</div></div>
+      <div class="stat-card"><div class="stat-num">100%</div><div class="stat-label">Completat</div></div>
+    </div>
+
+    <div class="result-summary" style="margin-top:1.75rem;">
+      <div class="summary-header">
+        <span>Resum de les teves respostes</span>
+        <span>Visible només per a tu</span>
+      </div>
+      <div id="summary-rows"></div>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+const answers = {}, likertVals = {};
+const startTime = Date.now();
+const sections = ['sec-filter','sec-general','sec-specific','sec-purchase','sec-demo'];
+const sectionLabels = ['Filtres de qualificació','Hàbits generals','Atributs i frustracions','Intenció de compra','Dades de classificació'];
+
+function countAnswered() {
+  let c = 0;
+  ['p1','p2','p3','p5','p11','p12','p13','p15','p16','p17'].forEach(k => { if (answers[k]) c++; });
+  ['p4','p8'].forEach(k => { if (answers[k]?.length) c++; });
+  ['p6','p9','p14'].forEach(k => { if (likertVals[k]) c++; });
+  if (document.getElementById('p10')?.value?.trim()) c++;
+  c++; // rank always
+  return Math.min(c, 17);
+}
+
+function updateProgress(secId) {
+  const idx = sections.indexOf(secId);
+  const pct = idx < 0 ? 100 : Math.round((idx / sections.length) * 100);
+  document.getElementById('progress-fill').style.width = pct + '%';
+  document.getElementById('progress-label').textContent = idx >= 0 ? sectionLabels[idx] : 'Completat';
+  document.getElementById('progress-count').textContent = countAnswered() + ' / 17';
+}
+
+function selectOpt(el, name) {
+  document.getElementById(name).querySelectorAll('.opt-label').forEach(l => l.classList.remove('selected'));
+  el.classList.add('selected');
+  answers[name] = el.querySelector('input').value;
+  hideErr('err-' + name);
+}
+
+function selectCheck(el) {
+  el.classList.toggle('selected');
+  el.querySelector('input').checked = el.classList.contains('selected');
+  const id = el.closest('.options').id;
+  answers[id] = Array.from(el.closest('.options').querySelectorAll('input:checked')).map(i => i.value);
+  hideErr('err-' + id);
+}
+
+function selectLikert(name, btn, val) {
+  document.getElementById('lk-' + name).querySelectorAll('.likert-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  likertVals[name] = val;
+  hideErr('err-' + name);
+}
+
+function moveUp(btn) {
+  const item = btn.closest('.rank-item'), list = document.getElementById('rank-p7');
+  const items = Array.from(list.children), idx = items.indexOf(item);
+  if (idx === 0) return;
+  list.insertBefore(item, items[idx - 1]);
+  renumber();
+}
+function moveDown(btn) {
+  const item = btn.closest('.rank-item'), list = document.getElementById('rank-p7');
+  const items = Array.from(list.children), idx = items.indexOf(item);
+  if (idx === items.length - 1) return;
+  list.insertBefore(items[idx + 1], item);
+  renumber();
+}
+function renumber() {
+  Array.from(document.getElementById('rank-p7').children).forEach((el, i) => {
+    el.querySelector('.rank-num').textContent = i + 1;
+  });
+}
+
+function hideErr(id) { document.getElementById(id)?.classList.remove('visible'); }
+function showErr(id) {
+  const el = document.getElementById(id);
+  if (el) { el.classList.add('visible'); el.scrollIntoView({ behavior:'smooth', block:'center' }); }
+}
+
+function validate(ids) {
+  let ok = true;
+  for (const id of ids) {
+    let valid = likertVals[id] || (Array.isArray(answers[id]) ? answers[id].length > 0 : !!answers[id]);
+    if (!valid) { showErr('err-' + id); ok = false; }
+  }
+  return ok;
+}
+
+function goNext(from, to, required, checkFilter) {
+  if (checkFilter) {
+    if (answers.p1 === 'No, no uso sneakers' || answers.p2 === "No m'interessa") {
+      showTerminated(); return;
+    }
+  }
+  if (!validate(required)) return;
+  document.getElementById(from).classList.remove('active');
+  document.getElementById(to).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateProgress(to);
+}
+
+function goBack(from, to) {
+  document.getElementById(from).classList.remove('active');
+  document.getElementById(to).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+  updateProgress(to);
+}
+
+function showTerminated() {
+  sections.forEach(s => document.getElementById(s).classList.remove('active'));
+  document.querySelector('.main').innerHTML = `
+    <div class="terminated">
+      <div class="terminated-icon">🙏</div>
+      <div class="terminated-title">Gràcies per la teva participació</div>
+      <div class="terminated-sub">Aquest qüestionari és específic per a persones usuàries de sneakers. Si en un futur comences a usar-ne, t'agrairíem que el completessis!</div>
+    </div>`;
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-label').textContent = 'Finalitzat';
+}
+
+function submitForm() {
+  if (!validate(['p15','p16','p17'])) return;
+  sections.forEach(s => document.getElementById(s).classList.remove('active'));
+  document.getElementById('sec-end').style.display = 'block';
+  document.getElementById('progress-fill').style.width = '100%';
+  document.getElementById('progress-label').textContent = 'Completat!';
+  document.getElementById('progress-count').textContent = '17 / 17';
+
+  const mins = Math.max(1, Math.round((Date.now() - startTime) / 60000));
+  document.getElementById('stat-time').textContent = mins;
+
+  const rankOrder = Array.from(document.querySelectorAll('#rank-p7 .rank-item')).map((el, i) => (i+1)+'. '+el.dataset.val).join(' · ');
+  const rows = [
+    ['P1', answers.p1], ['P2', answers.p2],
+    ['P3', answers.p3], ['P4', (answers.p4||[]).join(', ')],
+    ['P5', answers.p5], ['P6', likertVals.p6 ? likertVals.p6+' / 5' : '—'],
+    ['P7', rankOrder], ['P8', (answers.p8||[]).join(', ')],
+    ['P9', likertVals.p9 ? likertVals.p9+' / 5' : '—'],
+    ['P10', document.getElementById('p10')?.value || '(sense resposta)'],
+    ['P11', answers.p11], ['P12', answers.p12],
+    ['P13', answers.p13], ['P14', likertVals.p14 ? likertVals.p14+' / 5' : '—'],
+    ['P15', answers.p15], ['P16', answers.p16], ['P17', answers.p17]
+  ];
+
+  document.getElementById('summary-rows').innerHTML = rows
+    .map(([q,a]) => `<div class="summary-row"><span class="summary-q">${q}</span><span class="summary-a">${a||'—'}</span></div>`)
+    .join('');
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+updateProgress('sec-filter');
+</script>
+</body>
+</html>
